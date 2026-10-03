@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
-	"github.com/hashicorp/terraform-provider-googleworkspace/internal/provider"
+	"github.com/d-kidd-studio/terraform-provider-googleworkspace/internal/provider"
 )
 
 // Run "go generate" to format example terraform files and generate the docs for the registry/website
