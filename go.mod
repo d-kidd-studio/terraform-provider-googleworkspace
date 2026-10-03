@@ -1,4 +1,4 @@
-module github.com/hashicorp/terraform-provider-googleworkspace
+module github.com/d-kidd-studio/terraform-provider-googleworkspace
 
 go 1.25.0
 

@@ -3,17 +3,17 @@
     <img src="https://www.datocms-assets.com/2885/1620155116-brandhcterraformverticalcolor.svg" alt="Terraform logo" align="right" height="50" />
 </a>
 
-[![Releases](https://img.shields.io/github/release/SamuZad/terraform-provider-googleworkspace.svg)](https://github.com/SamuZad/terraform-provider-googleworkspace/releases)
-[![LICENSE](https://img.shields.io/github/license/SamuZad/terraform-provider-googleworkspace.svg)](https://github.com/SamuZad/terraform-provider-googleworkspace/blob/main/LICENSE)
-[![Unit tests](https://github.com/SamuZad/terraform-provider-googleworkspace/actions/workflows/test.yml/badge.svg)](https://github.com/SamuZad/terraform-provider-googleworkspace/actions/workflows/test.yml)
+[![Releases](https://img.shields.io/github/release/d-kidd-studio/terraform-provider-googleworkspace.svg)](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/releases)
+[![LICENSE](https://img.shields.io/github/license/d-kidd-studio/terraform-provider-googleworkspace.svg)](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/blob/main/LICENSE)
+[![Unit tests](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/actions/workflows/test.yml/badge.svg)](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/actions/workflows/test.yml)
 
 This Google Workspace provider for Terraform allows you to manage domains, users, and groups in your Google Workspace.
 
-This is a community-maintained fork of the [`hashicorp/terraform-provider-googleworkspace`](https://github.com/hashicorp/terraform-provider-googleworkspace) provider, which was archived by HashiCorp on 2025-06-30. It is published to the Terraform Registry as [`SamuZad/googleworkspace`](https://registry.terraform.io/providers/SamuZad/googleworkspace/latest). Please [file issues](https://github.com/SamuZad/terraform-provider-googleworkspace/issues/new/choose) generously and detail your experience while using the provider. We welcome your feedback.
+This provider is maintained by [d-kidd-studio](https://github.com/d-kidd-studio/terraform-provider-googleworkspace). It is based on the community-maintained [`SamuZad/googleworkspace`](https://github.com/SamuZad/terraform-provider-googleworkspace) provider, which descends from the archived HashiCorp provider. Please [file issues](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/issues/new/choose) generously and detail your experience while using the provider. We welcome your feedback.
 
 ## Maintainers
 
-This fork is maintained by [@SamuZad](https://github.com/SamuZad). It descends from the original `hashicorp/terraform-provider-googleworkspace`, which is no longer maintained upstream.
+This fork is maintained by [d-kidd-studio](https://github.com/d-kidd-studio). It preserves the existing functionality of the SamuZad provider while providing a maintained home for continued development.
 
 ## Requirements
 
@@ -56,7 +56,7 @@ Then commit the changes to `go.mod` and `go.sum`.
 
 ## Using The provider
 
-See the [Google Workspace Provider documentation](https://registry.terraform.io/providers/SamuZad/googleworkspace/latest/docs) to get started using the
+See the [Google Workspace Provider documentation](https://registry.terraform.io/providers/d-kidd-studio/googleworkspace/latest/docs) to get started using the
 Google Workspace provider.
 
 ## Developing the Provider
@@ -75,7 +75,7 @@ In order to run the full suite of Acceptance tests, run `make testacc`.
 $ make testacc
 ```
 
-For guidance on common development practices such as testing changes, see the [contribution guidelines](https://github.com/SamuZad/terraform-provider-googleworkspace/blob/main/.github/CONTRIBUTING.md).
+For guidance on common development practices such as testing changes, see the [contribution guidelines](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/blob/main/.github/CONTRIBUTING.md).
 If you have other development questions we don't cover, please file an issue!
 
 ## Special Recognition
