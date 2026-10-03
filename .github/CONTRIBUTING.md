@@ -12,7 +12,7 @@ What matters is thoughtful engagement with your own submission. Before opening a
 
 ## Go
 
-See the [test.yml](https://github.com/SamuZad/terraform-provider-googleworkspace/blob/main/.github/workflows/test.yml) file for which version of Go to use while developing the provider. You can manage it automatically using [`goenv`](https://github.com/syndbg/goenv).
+See the [test.yml](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/blob/main/.github/workflows/test.yml) file for which version of Go to use while developing the provider. You can manage it automatically using [`goenv`](https://github.com/syndbg/goenv).
 
 We aim to make the Google Workspace Provider a good steward of Go practices. See https://github.com/golang/go/wiki/CodeReviewComments for common Go mistakes that you should attempt to avoid.
 
@@ -20,7 +20,7 @@ We aim to make the Google Workspace Provider a good steward of Go practices. See
 
 ### Running Tests
 
-Configuring tests is similar to configuring the provider; see the [Provider Configuration Reference](https://registry.terraform.io/providers/SamuZad/googleworkspace/latest/docs) for more details. The following environment variables must be set in order to run tests:
+Configuring tests is similar to configuring the provider; see the [Provider Configuration Reference](https://registry.terraform.io/providers/d-kidd-studio/googleworkspace/latest/docs) for more details. The following environment variables must be set in order to run tests:
 
 ```
 GOOGLEWORKSPACE_CUSTOMER_ID
@@ -63,7 +63,7 @@ resource.TestStep{
 
 Running provider tests often can lead to dangling test resources caused by test failures. Terraform has a capability to run [Sweepers](https://www.terraform.io/docs/extend/testing/acceptance-tests/sweepers.html) which can go through and delete resources. In the Google Workspace provider, sweepers mainly:
 1. List every resource of a specific kind
-2. Iterate through the list and determine if a resource is [sweepable](https://github.com/SamuZad/terraform-provider-googleworkspace/blob/main/internal/provider/googleworkspace_sweeper_test.go#L19)
+2. Iterate through the list and determine if a resource is [sweepable](https://github.com/d-kidd-studio/terraform-provider-googleworkspace/blob/main/internal/provider/googleworkspace_sweeper_test.go#L19)
 3. If sweepable, delete the resource
 
 Sweepers run by using the `-sweep-run` flag:
@@ -82,8 +82,8 @@ Note that these instructions apply to `0.15+`.
 
 Setup:
 ```bash
-mkdir -p ~/.terraform.d/plugins/registry.terraform.io/SamuZad/googleworkspace/5.0.0/darwin_amd64
-ln -s $GOBIN/terraform-provider-googleworkspace ~/.terraform.d/plugins/registry.terraform.io/SamuZad/googleworkspace/5.0.0/darwin_amd64/terraform-provider-googleworkspace_v5.0.0
+mkdir -p ~/.terraform.d/plugins/registry.terraform.io/d-kidd-studio/googleworkspace/5.0.0/darwin_amd64
+ln -s $GOBIN/terraform-provider-googleworkspace ~/.terraform.d/plugins/registry.terraform.io/d-kidd-studio/googleworkspace/5.0.0/darwin_amd64/terraform-provider-googleworkspace_v5.0.0
 ```
 
 Edit the `provider_installation` block in your `~/.terraformrc` file to:
@@ -93,7 +93,7 @@ plugin_cache_dir   = "~/.terraform.d/plugin-cache"
 provider_installation {
 	filesystem_mirror {
 		path = "~/.terraform.d/plugin-cache"
-		include = ["registry.terraform.io/SamuZad/googleworkspace"]
+		include = ["registry.terraform.io/d-kidd-studio/googleworkspace"]
 	}
 }
 ```
