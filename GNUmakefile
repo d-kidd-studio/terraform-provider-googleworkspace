@@ -26,10 +26,19 @@ sweep:
 	@echo "WARNING: This will destroy infrastructure. Use only in development accounts."
 	go test ./internal/provider -v -sweep=$(SWEEP) -sweep-run=$(SWEEPARGS) -timeout 60m
 
-test: fmtcheck
-	go test -count=1 $(TESTARGS) -timeout=30s $(TEST)
+.PHONY: test test-unit testacc testacc-gmail
 
-# Run acceptance tests
-.PHONY: testacc
+# Run fast local unit tests. Acceptance tests are skipped by the SDK unless TF_ACC=1.
+test: test-unit
+
+test-unit: fmtcheck
+	TF_ACC=0 go test -count=1 $(TESTARGS) -timeout=30s $(TEST)
+
+# Run acceptance tests against a real Google Workspace. Gmail mailbox tests are
+# excluded; use testacc-gmail when GOOGLEWORKSPACE_TEST_GMAIL_USER is available.
 testacc: fmtcheck
-	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -timeout 120m
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -skip '^TestAccResourceGmailSendAsAlias_.*$$' -timeout 120m
+
+# Run only the Gmail acceptance tests. These require a real licensed Gmail user.
+testacc-gmail: fmtcheck
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^TestAccResourceGmailSendAsAlias_.*$$' -timeout 120m
