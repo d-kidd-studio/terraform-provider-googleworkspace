@@ -136,7 +136,7 @@ func TestConfigLoadAndValidate_accessTokenInvalid(t *testing.T) {
 	}
 }
 
-func TestConfigLoadAndValidate_accessToken(t *testing.T) {
+func TestAccConfigLoadAndValidate_accessToken(t *testing.T) {
 	if os.Getenv("TF_ACC") == "" {
 		t.Skip(fmt.Sprintf("Network access not allowed; use TF_ACC=1 to enable"))
 	}
@@ -189,11 +189,11 @@ func TestConfigLoadAndValidate_accessToken(t *testing.T) {
 	}
 }
 
-// TestConfigLoadAndValidate_accessTokenOnly covers a scenario where:
+// TestAccConfigLoadAndValidate_accessTokenOnly covers a scenario where:
 // 1. A service account is given an Admin Role in Google Workspace directly (no impersonation used in this test)
 // 2. That role gives it Admin API privileges to query the groups endpoint of the Admin API - `Groups Admin role`
 // The provider will then only need to be configured with the customer ID and an access token for that service account
-func TestConfigLoadAndValidate_accessTokenOnly(t *testing.T) {
+func TestAccConfigLoadAndValidate_accessTokenOnly(t *testing.T) {
 	if os.Getenv("TF_ACC") == "" {
 		t.Skip(fmt.Sprintf("Network access not allowed; use TF_ACC=1 to enable"))
 	}
