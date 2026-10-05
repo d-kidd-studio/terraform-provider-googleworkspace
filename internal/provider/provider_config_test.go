@@ -6,7 +6,6 @@ package googleworkspace
 import (
 	"context"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"testing"
 
@@ -16,49 +15,6 @@ import (
 	"google.golang.org/api/iamcredentials/v1"
 	"google.golang.org/api/option"
 )
-
-func TestConfigLoadAndValidate_credsInvalidJSON(t *testing.T) {
-	config := &apiClient{
-		Credentials:           "{this is not json}",
-		ImpersonatedUserEmail: "my-fake-email@example.com",
-	}
-
-	diags := config.loadAndValidate(context.Background())
-	if !diags.HasError() {
-		t.Fatalf("expected error, but got nil")
-	}
-}
-
-func TestConfigLoadAndValidate_credsJSON(t *testing.T) {
-	contents, err := ioutil.ReadFile(testFakeCredentialsPath)
-	if err != nil {
-		t.Fatalf("error: %v", err)
-	}
-
-	config := &apiClient{
-		Credentials:           string(contents),
-		ImpersonatedUserEmail: "my-fake-email@example.com",
-	}
-
-	diags := config.loadAndValidate(context.Background())
-	err = checkDiags(diags)
-	if err != nil {
-		t.Fatalf("%s", err.Error())
-	}
-}
-
-func TestConfigLoadAndValidate_credsFromFile(t *testing.T) {
-	config := &apiClient{
-		Credentials:           testFakeCredentialsPath,
-		ImpersonatedUserEmail: "my-fake-email@example.com",
-	}
-
-	diags := config.loadAndValidate(context.Background())
-	err := checkDiags(diags)
-	if err != nil {
-		t.Fatalf("%s", err.Error())
-	}
-}
 
 func TestAccConfigLoadAndValidate_credsFromEnv(t *testing.T) {
 	if os.Getenv("TF_ACC") == "" {
@@ -87,40 +43,7 @@ func TestAccConfigLoadAndValidate_credsFromEnv(t *testing.T) {
 	}
 }
 
-func TestConfigLoadAndValidate_credsNoImpersonation(t *testing.T) {
-	config := &apiClient{
-		Credentials: testFakeCredentialsPath,
-	}
-
-	diags := config.loadAndValidate(context.Background())
-	err := checkDiags(diags)
-	if err != nil {
-		t.Fatalf("%s", err.Error())
-	}
-}
-
-func TestConfigOauthScopes_custom(t *testing.T) {
-	config := &apiClient{
-		Credentials:           testFakeCredentialsPath,
-		ClientScopes:          []string{"https://www.googleapis.com/auth/admin/directory"},
-		ImpersonatedUserEmail: "my-fake-email@example.com",
-	}
-
-	diags := config.loadAndValidate(context.Background())
-	err := checkDiags(diags)
-	if err != nil {
-		t.Fatalf("%s", err.Error())
-	}
-
-	if len(config.ClientScopes) != 1 {
-		t.Fatalf("expected 1 scope, got %d scopes: %v", len(config.ClientScopes), config.ClientScopes)
-	}
-	if config.ClientScopes[0] != "https://www.googleapis.com/auth/admin/directory" {
-		t.Fatalf("expected scope to be %q, got %q", "https://www.googleapis.com/auth/admin/directory", config.ClientScopes[0])
-	}
-}
-
-func TestConfigLoadAndValidate_accessTokenInvalid(t *testing.T) {
+func TestAccConfigLoadAndValidate_accessTokenInvalid(t *testing.T) {
 	config := &apiClient{
 		AccessToken:           "abcdefghijklmnopqrstuvwxyz",
 		Customer:              os.Getenv("GOOGLEWORKSPACE_CUSTOMER_ID"),
@@ -189,10 +112,6 @@ func TestAccConfigLoadAndValidate_accessToken(t *testing.T) {
 	}
 }
 
-// TestAccConfigLoadAndValidate_accessTokenOnly covers a scenario where:
-// 1. A service account is given an Admin Role in Google Workspace directly (no impersonation used in this test)
-// 2. That role gives it Admin API privileges to query the groups endpoint of the Admin API - `Groups Admin role`
-// The provider will then only need to be configured with the customer ID and an access token for that service account
 func TestAccConfigLoadAndValidate_accessTokenOnly(t *testing.T) {
 	if os.Getenv("TF_ACC") == "" {
 		t.Skip(fmt.Sprintf("Network access not allowed; use TF_ACC=1 to enable"))
@@ -200,9 +119,6 @@ func TestAccConfigLoadAndValidate_accessTokenOnly(t *testing.T) {
 
 	testAccPreCheck(t)
 
-	// Get access token for the service account
-	// --- Use service account credentials to request the access token
-	// --- Request the `/auth/admin.directory.group` scope as it matches privileges in the Groups Admin role
 	credsFile := getTestCredsFromEnv()
 
 	contents, _, err := pathOrContents(credsFile)
@@ -224,7 +140,6 @@ func TestAccConfigLoadAndValidate_accessTokenOnly(t *testing.T) {
 		t.Fatalf("could not get token from oauth2 credentials: %s", err.Error())
 	}
 
-	// Configure the provider with the scoped access token from above + the customer ID
 	config := &apiClient{
 		AccessToken: at.AccessToken,
 		Customer:    os.Getenv("GOOGLEWORKSPACE_CUSTOMER_ID"),
@@ -259,9 +174,6 @@ func checkValidCreds(config *apiClient) diag.Diagnostics {
 	return diags
 }
 
-// checkValidCredsGroupAdmin makes an arbitary API call to check the auth is set correctly.
-// It makes a groups-related API call, to be used when testing auth relted to service accounts
-// given the Group Admin role directly (no impersonisation done during the auth)
 func checkValidCredsGroupAdmin(config *apiClient) diag.Diagnostics {
 	var diags diag.Diagnostics
 

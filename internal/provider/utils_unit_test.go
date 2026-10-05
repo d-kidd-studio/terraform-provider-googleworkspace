@@ -1,11 +1,8 @@
-// Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package googleworkspace
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestSnakeToCamel(t *testing.T) {
 	input := make([]string, 3)

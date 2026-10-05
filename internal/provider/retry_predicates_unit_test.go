@@ -1,4 +1,3 @@
-// Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package googleworkspace
@@ -136,6 +135,6 @@ func TestGoogleNot404Error(t *testing.T) {
 	expected := false
 
 	if isNotFound(err) != expected {
-		t.Error("Failed: The error was detected as a 404 but should not have been")
+		t.Error("Failed: The error was detected as 404 but should not have been")
 	}
 }
