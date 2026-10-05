@@ -1,4 +1,3 @@
-// Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
 package googleworkspace
@@ -9,7 +8,6 @@ import (
 )
 
 func TestConsistencyCheckReachedConsistency(t *testing.T) {
-	// We'll test that there were 3 inserts
 	numInserts := 3
 
 	cc := consistencyCheck{
@@ -19,14 +17,10 @@ func TestConsistencyCheckReachedConsistency(t *testing.T) {
 		lastEtag:       "12345",
 	}
 
-	// So far we've seen one etag and it's been consistent once
 	if cc.reachedConsistency(numInserts) {
 		t.Errorf("Failed: reached consistency (numInserts: %d, currConsistent: %d, etagChanges: %d, timeout: %d)", numInserts, cc.currConsistent, cc.etagChanges, int(cc.timeout.Minutes()))
 	}
 
-	// We only have 2 previous Etags, but we've been consistent for 3 minutes
-	// We'll assume it's consistent and that one of the inserts already contained
-	// and updated etag that we're missing
 	cc.etagChanges = 2
 	cc.currConsistent = 18
 
@@ -34,8 +28,6 @@ func TestConsistencyCheckReachedConsistency(t *testing.T) {
 		t.Errorf("Failed: did not reach consistency (numInserts: %d, currConsistent: %d, etagChanges: %d, timeout: %d)", numInserts, cc.currConsistent, cc.etagChanges, int(cc.timeout.Minutes()))
 	}
 
-	// We've seen all the inserts come through, but we haven't reached
-	// numConsistent consecutive consistent tags yet
 	cc.etagChanges = 3
 	cc.currConsistent = 1
 
@@ -43,9 +35,7 @@ func TestConsistencyCheckReachedConsistency(t *testing.T) {
 		t.Errorf("Failed: reached consistency (numInserts: %d, currConsistent: %d, etagChanges: %d, timeout: %d)", numInserts, cc.currConsistent, cc.etagChanges, int(cc.timeout.Minutes()))
 	}
 
-	// We've seen all the inserts come through, and it's been consistent
-	// numConsistent times
-	cc.currConsistent = numConsistent
+	cc.currConsistent = numInserts
 
 	if !cc.reachedConsistency(numInserts) {
 		t.Errorf("Failed: did not reach consistency (numInserts: %d, currConsistent: %d, etagChanges: %d, timeout: %d)", numInserts, cc.currConsistent, cc.etagChanges, int(cc.timeout.Minutes()))
