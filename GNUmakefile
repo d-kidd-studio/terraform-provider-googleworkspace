@@ -32,7 +32,7 @@ sweep:
 test: test-unit
 
 test-unit: fmtcheck
-	TF_ACC=0 go test -count=1 $(TESTARGS) -timeout=30s $(TEST)
+	TF_ACC=0 go test -count=1 $(TESTARGS) -skip '^TestAcc' -timeout=30s $(TEST)
 
 # Run acceptance tests against a real Google Workspace. Gmail mailbox tests are
 # excluded; use testacc-gmail when GOOGLEWORKSPACE_TEST_GMAIL_USER is available.
