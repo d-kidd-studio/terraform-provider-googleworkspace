@@ -43,6 +43,22 @@ func TestAccConfigLoadAndValidate_credsFromEnv(t *testing.T) {
 	}
 }
 
+func TestAccConfigLoadAndValidate_accessTokenInvalid(t *testing.T) {
+	config := &apiClient{
+		AccessToken:           "abcdefghijklmnopqrstuvwxyz",
+		Customer:              os.Getenv("GOOGLEWORKSPACE_CUSTOMER_ID"),
+		ImpersonatedUserEmail: os.Getenv("GOOGLEWORKSPACE_IMPERSONATED_USER_EMAIL"),
+		ClientScopes:          []string{"https://www.googleapis.com/auth/admin.directory.domain"},
+	}
+
+	config.loadAndValidate(context.Background())
+	diags := checkValidCreds(config)
+	err := checkDiags(diags)
+	if err == nil {
+		t.Fatalf("expected error, but got nil")
+	}
+}
+
 func TestAccConfigLoadAndValidate_accessToken(t *testing.T) {
 	if os.Getenv("TF_ACC") == "" {
 		t.Skip(fmt.Sprintf("Network access not allowed; use TF_ACC=1 to enable"))
