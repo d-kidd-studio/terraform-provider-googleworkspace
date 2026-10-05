@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        terraform: ["1.5.*", "1.9.*", "1.12.*", "latest"]
+        terraform: ["1.15.*", "1.16.*"]
     env:
       GOOGLEWORKSPACE_CREDENTIALS: ${{ secrets.GOOGLEWORKSPACE_CREDENTIALS }}
       GOOGLEWORKSPACE_CUSTOMER_ID: ${{ secrets.GOOGLEWORKSPACE_CUSTOMER_ID }}
@@ -62,7 +62,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        opentofu: ["1.6.*", "1.8.*", "latest"]
+        opentofu: ["1.12.*", "1.13.*"]
     env:
       GOOGLEWORKSPACE_CREDENTIALS: ${{ secrets.GOOGLEWORKSPACE_CREDENTIALS }}
       GOOGLEWORKSPACE_CUSTOMER_ID: ${{ secrets.GOOGLEWORKSPACE_CUSTOMER_ID }}
