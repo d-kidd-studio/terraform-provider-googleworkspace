@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: write
 
 jobs:
   unit:
@@ -36,6 +38,16 @@ jobs:
           name: unit-test-results
           path: test-results.xml
           if-no-files-found: error
+      - name: Report unit test results
+        if: always()
+        uses: dorny/test-reporter@v3
+        with:
+          name: Unit tests
+          path: test-results.xml
+          reporter: java-junit
+          fail-on-error: true
+          fail-on-empty: true
+          use-actions-summary: true
 
   acceptance:
     name: Acceptance tests (Google Workspace / Terraform ${{ matrix.terraform }})
