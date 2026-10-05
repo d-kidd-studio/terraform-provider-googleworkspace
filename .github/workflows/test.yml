@@ -25,8 +25,17 @@ jobs:
         run: go build ./...
       - name: Vet
         run: go vet ./...
+      - name: Install gotestsum
+        run: go install gotest.tools/gotestsum@v1.13.0
       - name: Unit tests
-        run: make test-unit
+        run: gotestsum --format testname --junitfile test-results.xml -- -count=1 -skip '^TestAcc' ./...
+      - name: Upload unit test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-results
+          path: test-results.xml
+          if-no-files-found: error
 
   acceptance:
     name: Acceptance tests (Google Workspace / Terraform ${{ matrix.terraform }})
