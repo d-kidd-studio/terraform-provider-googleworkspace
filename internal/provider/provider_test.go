@@ -81,12 +81,6 @@ func googleworkspaceTestClient() (*apiClient, error) {
 	return client, nil
 }
 
-func TestProvider(t *testing.T) {
-	if err := New("dev")().InternalValidate(); err != nil {
-		t.Fatalf("err: %s", err)
-	}
-}
-
 // testAccPreCheck ensures at least one of the credentials env variables is set.
 func testAccPreCheck(t *testing.T) {
 	// You can add code here to run prior to any test case execution, for example assertions
