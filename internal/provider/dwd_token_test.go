@@ -26,7 +26,12 @@ func TestDWDToken(t *testing.T) {
 		t.Fatal("GOOGLEWORKSPACE_IMPERSONATED_USER_EMAIL must be set")
 	}
 
-	creds, err := googleoauth.CredentialsFromJSONWithParams(context.Background(), []byte(credentials), googleoauth.CredentialsParams{
+	contents, _, err := pathOrContents(credentials)
+	if err != nil {
+		t.Fatalf("reading GOOGLEWORKSPACE_CREDENTIALS: %v", err)
+	}
+
+	creds, err := googleoauth.CredentialsFromJSONWithParams(context.Background(), []byte(contents), googleoauth.CredentialsParams{
 		Scopes: []string{
 			"https://www.googleapis.com/auth/admin.directory.group",
 		},
