@@ -37,8 +37,8 @@ test-unit: fmtcheck
 # Run acceptance tests against a real Google Workspace. Gmail mailbox tests are
 # excluded; use testacc-gmail when GOOGLEWORKSPACE_TEST_GMAIL_USER is available.
 testacc: fmtcheck
-	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAcc|TestDWD)' -skip '^TestAccResourceGmailSendAsAlias_.*$' -timeout 120m
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAcc|TestDWD)' -skip '^TestAccResourceGmailSendAsAlias_' -timeout 120m
 
 # Run only the Gmail acceptance tests. These require a real licensed Gmail user.
 testacc-gmail: fmtcheck
-	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^TestAccResourceGmailSendAsAlias_.*$$' -timeout 120m
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^TestAccResourceGmailSendAsAlias_' -timeout 120m
