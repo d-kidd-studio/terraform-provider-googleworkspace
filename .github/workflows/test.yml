@@ -106,6 +106,25 @@ jobs:
         if: env.GOOGLEWORKSPACE_CREDENTIALS != ''
         run: make testacc
 
+  acceptance-negative:
+    name: Acceptance tests (negative auth/validation)
+    needs: unit
+    runs-on: ubuntu-latest
+    environment: Acceptance
+    env:
+      GOOGLEWORKSPACE_CREDENTIALS: ${{ secrets.GOOGLEWORKSPACE_CREDENTIALS }}
+      GOOGLEWORKSPACE_CUSTOMER_ID: ${{ secrets.GOOGLEWORKSPACE_CUSTOMER_ID }}
+      GOOGLEWORKSPACE_DOMAIN: ${{ secrets.GOOGLEWORKSPACE_DOMAIN }}
+      GOOGLEWORKSPACE_IMPERSONATED_USER_EMAIL: ${{ secrets.GOOGLEWORKSPACE_IMPERSONATED_USER_EMAIL }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: 'go.mod'
+          cache: true
+      - name: Negative acceptance tests
+        if: env.GOOGLEWORKSPACE_CREDENTIALS != ''
+        run: make testacc-negative
   acceptance-gmail:
     name: Acceptance tests (Gmail / Terraform)
     needs: unit
