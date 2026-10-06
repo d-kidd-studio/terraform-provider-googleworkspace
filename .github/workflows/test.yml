@@ -30,7 +30,7 @@ jobs:
       - name: Install gotestsum
         run: go install gotest.tools/gotestsum@v1.13.0
       - name: Unit tests
-        run: gotestsum --format testname --junitfile test-results.xml -- -count=1 -skip '^TestAcc' ./...
+        run: gotestsum --format testname --junitfile test-results.xml -- -count=1 -skip '^(TestAcc|TestDWD)' ./...
       - name: Upload unit test results
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,6 +53,7 @@ jobs:
     name: Acceptance tests (Google Workspace / Terraform ${{ matrix.terraform }})
     needs: unit
     runs-on: ubuntu-latest
+    environment: Acceptance
     strategy:
       fail-fast: false
       matrix:
@@ -80,6 +81,7 @@ jobs:
     name: Acceptance tests (Google Workspace / OpenTofu ${{ matrix.opentofu }})
     needs: unit
     runs-on: ubuntu-latest
+    environment: Acceptance
     strategy:
       fail-fast: false
       matrix:
@@ -108,6 +110,7 @@ jobs:
     name: Acceptance tests (Gmail / Terraform)
     needs: unit
     runs-on: ubuntu-latest
+    environment: Acceptance
     env:
       GOOGLEWORKSPACE_CREDENTIALS: ${{ secrets.GOOGLEWORKSPACE_CREDENTIALS }}
       GOOGLEWORKSPACE_CUSTOMER_ID: ${{ secrets.GOOGLEWORKSPACE_CUSTOMER_ID }}
