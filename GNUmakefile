@@ -29,7 +29,7 @@ sweep:
 .PHONY: test test-unit testacc testacc-negative testacc-gmail
 
 # Slow negative authentication tests are run separately from the main acceptance suite.
-TESTACC_SKIP?='^(TestAccResourceUser_noImpersonation|TestAccResourceGroup_noImpersonation|TestAccConfigLoadAndValidate_accessTokenOnly|TestAccResourceGmailSendAsAlias_)'
+TESTACC_SKIP?=^(TestAccResourceUser_noImpersonation|TestAccResourceGroup_noImpersonation|TestAccConfigLoadAndValidate_accessTokenOnly|TestAccResourceGmailSendAsAlias_)
 
 # Run fast local unit tests. Acceptance tests are skipped by the SDK unless TF_ACC=1.
 test: test-unit
@@ -40,11 +40,11 @@ test-unit: fmtcheck
 # Run acceptance tests against a real Google Workspace. Gmail mailbox tests are
 # excluded; use testacc-gmail when GOOGLEWORKSPACE_TEST_GMAIL_USER is available.
 testacc: fmtcheck
-	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAcc|TestDWD)' -skip $(TESTACC_SKIP) -timeout 120m
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAcc|TestDWD)' -skip '$(TESTACC_SKIP)' -timeout 120m
 
 # Run the slow negative authentication/validation tests separately from the main acceptance suite.
 testacc-negative: fmtcheck
-	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAccResourceUser_noImpersonation|TestAccResourceGroup_noImpersonation|TestAccConfigLoadAndValidate_accessTokenOnly)$' -timeout 20m
+	TF_ACC=1 go test -count=1 $(TEST) -v $(TESTARGS) -run '^(TestAccResourceUser_noImpersonation|TestAccResourceGroup_noImpersonation|TestAccConfigLoadAndValidate_accessTokenOnly)$$' -timeout 20m
 
 # Run only the Gmail acceptance tests. These require a real licensed Gmail user.
 testacc-gmail: fmtcheck
