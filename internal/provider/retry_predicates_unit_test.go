@@ -29,13 +29,13 @@ func TestIsCommonRetryableErrorCode_retryableErrorCode(t *testing.T) {
 
 func TestIsCommonRetryableErrorCode_nonRetryableClientErrors(t *testing.T) {
 	cases := map[string]googleapi.Error{
-		"400": {Code: 400},
+		"400":                {Code: 400},
 		"401 login required": {Code: 401, Body: "Login Required"},
-		"402": {Code: 402},
-		"403 unauthorized": {Code: 403, Body: "Not Authorized to access this resource/api"},
-		"404": {Code: 404},
-		"409": {Code: 409},
-		"422": {Code: 422},
+		"402":                {Code: 402},
+		"403 unauthorized":   {Code: 403, Body: "Not Authorized to access this resource/api"},
+		"404":                {Code: 404},
+		"409":                {Code: 409},
+		"422":                {Code: 422},
 	}
 	for name, err := range cases {
 		err := err

@@ -70,6 +70,10 @@ func googleworkspaceTestClient() (*apiClient, error) {
 		Credentials:           creds,
 		Customer:              customerId,
 		ImpersonatedUserEmail: impersonatedUser,
+		ClientScopes: []string{
+			"https://www.googleapis.com/auth/admin.directory.group",
+			"https://www.googleapis.com/auth/apps.groups.settings",
+		},
 	}
 
 	diags := client.loadAndValidate(context.Background())
