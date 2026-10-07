@@ -90,21 +90,9 @@ func isCommonRetryableErrorCode(err error) (bool, string) {
 		return true, fmt.Sprintf("Retryable error code %d", gerr.Code)
 	}
 
-	if gerr.Code == 401 && strings.Contains(gerr.Body, "Login Required") {
-		log.Printf("[DEBUG] Dismissed an error as retryable based on error code: %s", err)
-		return true, fmt.Sprintf("Retryable error code %d", gerr.Code)
-	}
-
-	// Unfortunately, the Google API sometimes returns 403 - Not Authorized to access this resource/api after a create operation
-	// even though the resource was created successfully. Becasue of this, we should retry on 403 errors as well
-	// This will lead to slower error responses when there is an actual problem, but it is better than failing the operation
-	// when the resource was created successfully. Some of the actual problems include:
-	// - trying to modify certain fields on an admin user without domain-wide delegation
-	// - trying to undertake operations without the correct permissions
-	if gerr.Code == 403 && strings.Contains(gerr.Body, "Not Authorized to access this resource/api") {
-		log.Printf("[DEBUG] Dismissed an error as retryable based on error code: %s", err)
-		return true, fmt.Sprintf("Retryable error code %d", gerr.Code)
-	}
+	// Authentication and authorization errors are not transient. Retrying will not
+	// change the credentials, scopes, or permissions that caused the request to fail.
+	// Rate-limit/quota-related 403s are handled separately by isRateLimitExceeded.
 	return false, ""
 }
 
