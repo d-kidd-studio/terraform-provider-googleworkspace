@@ -17,6 +17,31 @@ import (
 	googleoauth "golang.org/x/oauth2/google"
 )
 
+// DefaultClientScopes is the provider's default OAuth scope set. Keep this inventory
+// synchronized with new resources and data sources. These scopes are requested together
+// when oauth_scopes is not explicitly configured; Google requires every requested scope
+// to be authorized for the service account's Domain-Wide Delegation client.
+//
+// Scope-to-functionality map (verified against the resource/data-source implementations):
+//   - gmail.settings.basic: Gmail send-as aliases (resourceGmailSendAsAlias).
+//   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate).
+//   - chrome.management.policy: Chrome policy resources and policy schema data source.
+//   - cloud-platform: broad Cloud Identity API authorization used by dynamic groups
+//     (resourceDynamicGroup and dataSourceDynamicGroup); Cloud Identity also documents
+//     the narrower cloud-identity.groups scope for this API.
+//   - admin.directory.customer: customer-level Admin SDK Directory operations.
+//   - admin.directory.domain: Workspace domains and domain aliases.
+//   - admin.directory.group: groups and group membership operations/data sources.
+//   - admin.directory.orgunit: organizational units.
+//   - admin.directory.rolemanagement: roles, role assignments, and privileges.
+//   - admin.directory.userschema: custom user schemas.
+//   - admin.directory.user: users and user-related Directory API operations/data sources.
+//   - apps.groups.settings: Google Groups settings resources and data sources.
+//
+// Some resource descriptions also document their individual scope. This list is a
+// provider-wide default, not a statement that every installation needs every scope.
+// Configure oauth_scopes explicitly when a deployment intentionally enables only a
+// subset of provider functionality. Do not remove a scope without tracing its call sites.
 var DefaultClientScopes = []string{
 	"https://www.googleapis.com/auth/gmail.settings.basic",
 	"https://www.googleapis.com/auth/gmail.settings.sharing",
