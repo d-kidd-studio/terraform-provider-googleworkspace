@@ -17,6 +17,45 @@ import (
 	googleoauth "golang.org/x/oauth2/google"
 )
 
+// DefaultClientScopes is the provider's default OAuth scope set. Keep this inventory
+// synchronized with new resources and data sources. When credentials are used, these
+// scopes are requested together unless oauth_scopes is explicitly configured; an explicit
+// oauth_scopes list replaces this default set rather than extending it. For service-account
+// Domain-Wide Delegation, the OAuth client must be authorized for every requested scope.
+//
+// Scope-to-functionality audit (resource/data-source call sites and provider tests):
+//   - gmail.settings.basic: Gmail send-as alias reads and basic updates (resourceGmailSendAsAlias).
+//   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate) and send-as alias
+//     creation/operations that require the sharing scope (resourceGmailSendAsAlias).
+//   - chrome.management.policy: Chrome policy resource and policy schema data source.
+//   - cloud-platform: no production resource/data-source call site identified in this audit.
+//     It is used by the acceptance-test helper that calls the IAM Credentials API. Dynamic
+//     groups use Cloud Identity, whose resource/data-source descriptions specify the narrower
+//     cloud-identity.groups scope is explicitly supported by the Cloud Identity API and is
+//     the narrower fit for dynamic groups. cloud-platform is therefore broader than needed
+//     for that feature, but retain it pending a deliberate compatibility decision.
+//   - admin.directory.customer: Customers.Get is called by checkValidCreds in
+//     provider_config_test.go, but no production resource/data-source call site was found.
+//     This appears test-only/historical in the current tree; confirm whether it is needed for
+//     backward compatibility before removing it.
+//   - admin.directory.domain: Workspace domains and domain aliases.
+//   - admin.directory.group: groups, group membership, and Directory API aliases for dynamic
+//     groups.
+//   - admin.directory.orgunit: organizational units.
+//   - admin.directory.rolemanagement: roles, role assignments, and privileges.
+//   - admin.directory.userschema: custom user schemas and their validation/lookups.
+//   - admin.directory.user: user resources and data sources.
+//   - apps.groups.settings: Google Groups settings resources and data sources.
+//
+// Additional API-scope finding: resourceUserDelete can optionally transfer Drive/Docs,
+// Calendar, and Looker Studio data through the Admin SDK Data Transfer API. The default
+// list does not include admin.datatransfer; users enabling that option may need to add the
+// Data Transfer API scope explicitly. Verify the exact minimum scope against current Google
+// API documentation before changing defaults or resource documentation.
+//
+// This is a provider-wide default, not a claim that every installation needs every scope.
+// Do not narrow or remove a scope solely because the current DWD test client has not
+// authorized it. API permissions and DWD scope authorization are separate concerns.
 var DefaultClientScopes = []string{
 	"https://www.googleapis.com/auth/gmail.settings.basic",
 	"https://www.googleapis.com/auth/gmail.settings.sharing",
