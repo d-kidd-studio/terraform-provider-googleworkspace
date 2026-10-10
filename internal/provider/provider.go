@@ -24,18 +24,20 @@ import (
 // Domain-Wide Delegation, the OAuth client must be authorized for every requested scope.
 //
 // Scope-to-functionality audit (resource/data-source call sites and provider tests):
-//   - gmail.settings.basic: Gmail send-as aliases (resourceGmailSendAsAlias).
-//   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate).
+//   - gmail.settings.basic: Gmail send-as alias reads and basic updates (resourceGmailSendAsAlias).
+//   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate) and send-as alias
+//     creation/operations that require the sharing scope (resourceGmailSendAsAlias).
 //   - chrome.management.policy: Chrome policy resource and policy schema data source.
 //   - cloud-platform: no production resource/data-source call site identified in this audit.
 //     It is used by the acceptance-test helper that calls the IAM Credentials API. Dynamic
 //     groups use Cloud Identity, whose resource/data-source descriptions specify the narrower
-//     cloud-identity.groups scope. Treat this default as potentially historical/overbroad;
-//     do not remove it until compatibility and scope requirements are confirmed.
+//     cloud-identity.groups scope is explicitly supported by the Cloud Identity API and is
+//     the narrower fit for dynamic groups. cloud-platform is therefore broader than needed
+//     for that feature, but retain it pending a deliberate compatibility decision.
 //   - admin.directory.customer: Customers.Get is called by checkValidCreds in
 //     provider_config_test.go, but no production resource/data-source call site was found.
-//     This appears test-only/historical in the current tree and needs a compatibility decision
-//     before removal.
+//     This appears test-only/historical in the current tree; confirm whether it is needed for
+//     backward compatibility before removing it.
 //   - admin.directory.domain: Workspace domains and domain aliases.
 //   - admin.directory.group: groups, group membership, and Directory API aliases for dynamic
 //     groups.
