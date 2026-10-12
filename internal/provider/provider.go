@@ -24,17 +24,17 @@ import (
 // Domain-Wide Delegation, the OAuth client must be authorized for every requested scope.
 //
 // Scope-to-functionality audit (resource/data-source call sites and provider tests):
-//   - gmail.settings.basic: Gmail send-as alias reads and updates where this scope is
-//     accepted (resourceGmailSendAsAlias).
+//   - gmail.settings.basic: Gmail send-as alias reads and updates where this scope is accepted
+//     (resourceGmailSendAsAlias).
 //   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate) and send-as alias
 //     creation (resourceGmailSendAsAlias). Google's send-as create endpoint requires this scope.
 //   - chrome.management.policy: Chrome policy resource and policy schema data source.
 //   - cloud-platform: no production resource/data-source call site identified in this audit.
-//     It is used by the acceptance-test helper that calls the IAM Credentials API. Dynamic
-//     groups use Cloud Identity, whose resource/data-source descriptions specify the narrower
-//     cloud-identity.groups scope is explicitly supported by the Cloud Identity API and is
-//     the narrower fit for dynamic groups. cloud-platform is therefore broader than needed
-//     for that feature, but retain it pending a deliberate compatibility decision.
+//     It is used by an acceptance-test helper that calls the IAM Credentials API. Dynamic
+//     groups use Cloud Identity. The narrower cloud-identity.groups scope is explicitly
+//     supported by that API and is the preferred fit for dynamic groups. cloud-platform is
+//     also accepted, but is broader than needed for that feature; retain it pending a deliberate
+//     compatibility decision.
 //   - admin.directory.customer: Customers.Get is called by checkValidCreds in
 //     provider_config_test.go, but no production resource/data-source call site was found.
 //     This appears test-only/historical in the current tree; confirm whether it is needed for
@@ -49,10 +49,10 @@ import (
 //   - apps.groups.settings: Google Groups settings resources and data sources.
 //
 // Additional API-scope finding: resourceUserDelete can optionally transfer Drive/Docs,
-// Calendar, and Looker Studio data through the Admin SDK Data Transfer API. The default
-// list does not include admin.datatransfer; users enabling that option may need to add the
-// Data Transfer API scope explicitly. Verify the exact minimum scope against current Google
-// API documentation before changing defaults or resource documentation.
+// Calendar, and Looker Studio data through the Admin SDK Data Transfer API. The API's
+// transfers.insert method requires admin.datatransfer, which is not in this default list.
+// This optional feature therefore needs an explicit scope configuration that includes
+// admin.datatransfer; the provider should document this requirement.
 //
 // This is a provider-wide default, not a claim that every installation needs every scope.
 // Do not narrow or remove a scope solely because the current DWD test client has not
