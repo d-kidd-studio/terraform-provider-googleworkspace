@@ -24,9 +24,10 @@ import (
 // Domain-Wide Delegation, the OAuth client must be authorized for every requested scope.
 //
 // Scope-to-functionality audit (resource/data-source call sites and provider tests):
-//   - gmail.settings.basic: Gmail send-as alias reads and basic updates (resourceGmailSendAsAlias).
+//   - gmail.settings.basic: Gmail send-as alias reads and updates where this scope is
+//     accepted (resourceGmailSendAsAlias).
 //   - gmail.settings.sharing: Gmail mailbox delegates (resourceUserDelegate) and send-as alias
-//     creation/operations that require the sharing scope (resourceGmailSendAsAlias).
+//     creation (resourceGmailSendAsAlias). Google's send-as create endpoint requires this scope.
 //   - chrome.management.policy: Chrome policy resource and policy schema data source.
 //   - cloud-platform: no production resource/data-source call site identified in this audit.
 //     It is used by the acceptance-test helper that calls the IAM Credentials API. Dynamic
