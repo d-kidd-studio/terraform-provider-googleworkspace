@@ -18,10 +18,12 @@ import (
 )
 
 // DefaultClientScopes is the provider's default OAuth scope set. Keep this inventory
-// synchronized with new resources and data sources. When credentials are used, these
-// scopes are requested together unless oauth_scopes is explicitly configured; an explicit
-// oauth_scopes list replaces this default set rather than extending it. For service-account
-// Domain-Wide Delegation, the OAuth client must be authorized for every requested scope.
+// synchronized with new resources and data sources. With service-account credentials or
+// access-token-based impersonation, these scopes are requested together unless oauth_scopes
+// is explicitly configured; an explicit list replaces this default set rather than extending
+// it. A directly supplied access_token cannot have its granted scopes changed by oauth_scopes.
+// For service-account Domain-Wide Delegation, the OAuth client must authorize every requested
+// scope.
 //
 // Scope-to-functionality audit (resource/data-source call sites and provider tests):
 //   - gmail.settings.basic: Gmail send-as alias reads and updates where this scope is accepted
